@@ -1,0 +1,402 @@
+<script type="text/javascript">
+document.addEventListener("DOMContentLoaded", function(){
+
+  let articleElement = document.getElementById('js-she-coded-page__some-stories-sub-container');
+  if(articleElement) {
+    getArticles(articleElement);
+  }
+
+  function renderArticles(articles, articleElement) {
+    let articleDiv = articleElement;
+    const articleHTML = articles.map((article) => {
+      return `<a class="she-coded-page__some-story-container-link" href="${article.url}"><div class="she-coded-page__some-story-container">
+        <div class="she-coded-page__some-story-tag"><span class="she-coded-page__some-story-hashtag">#</span><span>shecoded</span></div>
+        <div class="she-coded-page__some-story-header">${article.title}</div>
+        <div class="she-coded-page__some-story-info">
+          <div class="she-coded-page__some-story-info-author-details">
+            <div class="she-coded-page__some-story-info-pic">
+              <img src="${article.user.profile_image}" alt="${article.user.name}'s profile picture"/>
+            </div>
+            <div class="she-coded-page__some-story-info-name">${article.user.name}</div>
+          </div>
+          <div class="she-coded-page__some-story-info-date">&nbsp; &#183; &nbsp; ${article.readable_publish_date}</div>
+        </div>
+      </div></a>`
+    });
+
+    articleDiv.innerHTML = articleHTML.join(" ");
+  }
+
+  function renderNoArticles(articleElement) {
+    let articleDiv = articleElement;
+    articleDiv.innerHTML = "<div>There are no articles to show.</div>";
+  }
+
+  function getArticles(articleElement) {
+    let xmlhttp;
+    if (window.XMLHttpRequest) {
+      xmlhttp = new XMLHttpRequest();
+    } else {
+      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+
+    xmlhttp.onreadystatechange = function() {
+      if (xmlhttp.readyState === XMLHttpRequest.DONE) {
+        let json = JSON.parse(xmlhttp.responseText);
+        document.getElementById("js-she-coded-page__loading-articles").style.display = "none";
+        return json.length > 0 ? renderArticles(json, articleElement) : renderNoArticles(articleElement);
+      }
+    };
+
+    let url = "/api/articles";
+    let params = "tag=shecoded&per_page=45";
+
+    xmlhttp.open("GET", `${url}?${params}`, true);
+    xmlhttp.send();
+  }
+
+});
+
+</script>
+
+<div>
+  <style>
+    .she-coded-page__container {
+      background: url(https://dev-to-uploads.s3.amazonaws.com/i/2b2spes1e3sby7g1dwq0.jpg);
+      margin: 0 auto;
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center top;
+      height: 100%;
+    }
+
+    .she-coded-page__some-story-container-link {
+      min-height: 104px;
+    }
+
+    .she-coded-hero-banner__logo {
+      width: 625px;
+      height: auto;
+    }
+
+    .she-coded-page__container a {
+      color: black;
+      cursor: pointer;
+    }
+
+    .she-coded-page__some-story-container {
+      /* color: #202428; */
+      color: var(--theme-container-color, #0a0a0a);
+    }
+
+    .she-coded-page__overlay-container {
+      background: linear-gradient(119.95deg, #3140E7 6.46%, rgba(49, 64, 231, 0) 36.04%);
+      padding: 4em 0 4em 0;
+    }
+
+    .she-coded-page__sheet-container {
+      background: var(--theme-background, #f9fafa) !important;
+      border: 2px solid #C0BCCD;
+      box-sizing: border-box;
+      box-shadow: 6px 6px 0px #C0BCCD;
+      border-radius: 3px;
+      padding: 64px;
+      position: relative;
+    }
+
+    .she-coded-page__sub-container {
+      max-width: 85%;
+      margin: 0 auto;
+    }
+
+    .she-coded-page__sticker {
+      position: absolute;
+      top: -5.5em;
+      right: -4em;
+      height: 450px;
+    }
+
+    .she-coded-page__sheet-description {
+      width: 65%;
+    }
+
+    .she-coded-page__divider {
+      background: linear-gradient(270deg, #FCCE4F -0.05%, #2CAEA1 51.58%, #B1A3F4 99.95%);
+      border-radius: 8px;
+      height: 2px;
+      margin: 64px 0;
+    }
+
+    .she-coded-page__share-stories-header {
+      margin-bottom: 0;
+    }
+
+    .she-coded-page__story-tags-container {
+      display: flex;
+      margin: 2em 0 3em 0;
+      justify-content: space-between;
+    }
+
+    .she-coded-page__sub-header-description {
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    .she-coded-page__story-tag-container {
+      margin-right: 2em;
+    }
+
+    .she-coded-page__story-tag-container:last-child {
+      margin-right: 0;
+    }
+
+    .she-coded-page__story-tag-header {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+      font-weight: bold;
+      font-size: 24px;
+      line-height: 28px; /* identical to box height, or 117% */   /* Dolphin / Main */
+      color: #4755EB;
+      margin: 8px 0;
+    }
+
+    .she-coded-page__story-tag-description {
+      margin: 8px 0;
+      letter-spacing: -0.02em;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .she-coded-page__story-tag-list li {
+      line-height: 24px;
+      letter-spacing: -0.02em;
+      font-size: 16px;
+    }
+
+    .she-coded-page__story-tag-button {
+      background: #4755EB;
+      border-radius: 3px;
+      padding: 0.5em 1em;
+      color: white;
+      text-align: center;
+      width: 90%;
+    }
+
+    .she-coded-page__sub-header {
+      font-size: 30px;
+      line-height: 32px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .she-coded-page__some-stories-sub-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-gap: 0 32px;
+    }
+
+    .she-coded-page__some-stories-description {
+      margin-bottom: 2em;
+    }
+
+    .she-coded-page__some-story-tag {
+      letter-spacing: -0.05em;
+      font-size: 14px;
+      line-height: 20px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+    }
+
+    .she-coded-page__some-story-tag {
+      color: var(--theme-container-color, #363D44);
+    }
+
+    .she-coded-page__some-story-hashtag {
+      color: #99A3AD;
+      margin-right: 2px;
+    }
+
+    .she-coded-page__some-story-header {
+      font-weight: bold;
+      font-size: 20px;
+      line-height: 28px;
+      margin: 2px 0;
+    }
+
+    .she-coded-page__some-story-info {
+      display: flex;
+      justify-content: initial;
+      font-size: 16px;
+      line-height: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .she-coded-page__some-story-info-author-details {
+      display: flex;
+    }
+
+    .she-coded-page__some-story-info-pic {
+      margin-right: 8px;
+    }
+
+    .she-coded-page__some-story-info-pic img {
+      width: 24px;
+      height: 24px;
+      border-radius: 24px;
+    }
+
+    .she-coded-page__some-story-container {
+      padding: 2em 0;
+    }
+
+    .she-coded-page__see-more-button-container {
+      text-align: center;
+      margin: 32px 0 0 0;
+    }
+
+    .she-coded-page__see-more-button {
+      height: 40px;
+      background: #4755EB;
+      border-radius: 3px;
+      color: white;
+      line-height: 40px;
+    }
+
+    @media only screen and (max-width: 768px) {
+      .she-coded-page__sticker {
+        height: calc(80/100 * 450px);
+      }
+      .she-coded-page__some-story-info {
+        flex-direction: column;
+      }
+      .she-coded-hero-banner__logo {
+        width: 100%;
+      }
+
+      .she-coded-page__story-tags-container {
+        flex-direction: column;
+      }
+
+      .she-coded-page__story-tag-container {
+          margin: 1em 0;
+      }
+
+      .she-coded-page__some-stories-sub-container {
+        grid-template-columns: repeat(1, 1fr);
+      }
+
+      .she-coded-page__sticker {
+        position: static;
+      }
+      .she-coded-page__some-story-info {
+        flex-direction: row;
+      }
+
+      .she-coded-page__some-story-container {
+        padding: 1em;
+      }
+    }
+
+    @media only screen and (max-width: 425px) {
+      .she-coded-page__sticker {
+        height: calc(40/100 * 450px);
+      }
+
+      .she-coded-page__sheet-container {
+        padding: 16px;
+      }
+
+      .she-coded-page__sheet-description {
+        width: 100%;
+      }
+
+
+    }
+  </style>
+
+  <div class="she-coded-page__container">
+    <div class="she-coded-page__overlay-container">
+      <div class="she-coded-page__sub-container">
+        <div class="she-coded-page__logo">
+          <img class="she-coded-hero-banner__logo" src="https://dev-to-uploads.s3.amazonaws.com/i/0j0cbs668sni2hclgx1o.png">
+        </div>
+        <div class="she-coded-page__sheet-container campaign-description__container">
+          <div class="she-coded-page__sticker-container">
+            <img class="she-coded-page__sticker" src="https://dev-to-uploads.s3.amazonaws.com/i/wldub08qchqrq2u3c8it.png" alt="she coded sticker">
+          </div>
+          <div class="she-coded-page__sheet-description">
+            <h1 class="she-coded-page__sheet-header">Let’s get ready for International Women’s Day!</h1>
+            <p class="she-coded-page__sub-header-description">
+              Each year, <b>“Nevertheless, She Coded”</b> amplifies the journeys of self-identifying women and non-binary people who code.  Our annual #SheCoded celebration has blossomed into a truly beautiful collection of experiences, with each voice adding powerful perspective, wisdom, and advice.
+            </p>
+            <p class="she-coded-page__sub-header-description">
+              In preparation for our big celebration on March 6-9, 2020, we’re collecting stories and advice from everyone in the community. We all have a part to play in accelerating equality.
+            </p>
+          </div>
+
+          <div class="she-coded-page__divider"></div>
+
+          <div class="she-coded-page__share-stories-container">
+            <div class="she-coded-page__sub-header">Share your story</div>
+            <div class="she-coded-page__sub-header-description">
+              Your story matters. Write a post with any of the suggested prompts below.
+            </div>
+            <div class="she-coded-page__story-tags-container">
+              <div class="she-coded-page__story-tag-container">
+                <div class="she-coded-page__story-tag-header">#SheCoded</div>
+                <div class="she-coded-page__story-tag-description">Prompts include:</div>
+                <ul class="she-coded-page__story-tag-list">
+                  <li>Equality in tech looks like...</li>
+                  <li>I’m an expert at...</li>
+                  <li>My advice for allies to support self-identifying women and non-binary folks who code is...</li>
+                </ul>
+                <a href="https://dev.to/new/shecoded"><div class="she-coded-page__story-tag-button">Write #SheCoded Post</div></a>
+              </div>
+
+              <div class="she-coded-page__story-tag-container">
+                <div class="she-coded-page__story-tag-header">#TheyCoded</div>
+                <div class="she-coded-page__story-tag-description">Prompts include:</div>
+                <ul class="she-coded-page__story-tag-list">
+                  <li>Equality in tech looks like...</li>
+                  <li>I’m an expert at...</li>
+                  <li>My advice for allies to support non-binary and self-identifying women folks who code is...</li>
+                </ul>
+                <a href="https://dev.to/new/theycoded"><div class="she-coded-page__story-tag-button">Write #TheyCoded Post</div></a>
+              </div>
+
+              <div class="she-coded-page__story-tag-container">
+                <div class="she-coded-page__story-tag-header">#SheCodedAlly</div>
+                <div class="she-coded-page__story-tag-description">Prompts include:</div>
+                <ul class="she-coded-page__story-tag-list">
+                  <li>Equality in tech looks like...</li>
+                  <li>I will advocate for equality by...</li>
+                  <li>My advice for allies to support self-identifying women and non-binary folks who code is...</li>
+                </ul>
+                <a href="https://dev.to/new/shecodedally"><div class="she-coded-page__story-tag-button">Write #SheCodedAlly Post</div></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="she-coded-page__divider"></div>
+
+          <div class="she-coded-page__some-stories-container">
+            <div class="she-coded-page__sub-header">Community Stories</div>
+            <div class="she-coded-page__sub-header-description">
+              Our collection of stories from self-identifying women and non-binary people in the community.
+            </div>
+            <!-- examples will go in here -->
+            <div id="js-she-coded-page__some-stories-sub-container" class="she-coded-page__some-stories-sub-container">
+              <div class="she-coded-page__loading-articles" id="js-she-coded-page__loading-articles">
+                loading...
+              </div>
+            </div>
+            <!-- examples end here -->
+            <div class="she-coded-page__see-more-button-container">
+              <a href="https://dev.to/t/shecoded"><div class="she-coded-page__see-more-button">See more stories</div></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
