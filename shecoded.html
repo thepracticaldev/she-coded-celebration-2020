@@ -57,6 +57,18 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
+
+InstantClick.on('change', function() {
+     window.document.dispatchEvent(new Event("DOMContentLoaded", {
+    bubbles: true,
+    cancelable: true
+  }));
+});
+
+
+
+
+
 </script>
 
 <div>
